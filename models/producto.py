@@ -32,7 +32,7 @@ class Producto(models.Model):
                                                     ("congelado", "Congelado")],
                                          string="Conservación", default="ambiente",
                                          help="Cómo hay que guardar el producto")
-
+    
     fecha_caducidad = fields.Date(string="Fecha de caducidad", help="Día en que caduca el producto")
 
     # se rellena sola con la fecha y hora del momento en que se crea el producto
