@@ -32,7 +32,7 @@ class Producto(models.Model):
                                                     ("congelado", "Congelado")],
                                          string="Conservación", default="ambiente",
                                          help="Cómo hay que guardar el producto")
-    
+
     fecha_caducidad = fields.Date(string="Fecha de caducidad", help="Día en que caduca el producto")
 
     # se rellena sola con la fecha y hora del momento en que se crea el producto
@@ -40,3 +40,6 @@ class Producto(models.Model):
                                  help="Cuándo se dio de alta el producto")
 
     en_oferta = fields.Boolean(string="En oferta", default=False, help="Marcar si el producto está en oferta")
+
+    # Many2one: cada producto esta en una sola seccion (el One2many esta en seccion.py)
+    seccion_id = fields.Many2one("supermercado.seccion", string="Sección", help="Sección donde está el producto")

@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_producto_user,access.producto.user,model_supermercado_producto,base.group_user,1,1,1,0
 access_producto_admin,access.producto.admin,model_supermercado_producto,base.group_system,1,1,1,1
+access_seccion_user,access.seccion.user,model_supermercado_seccion,base.group_user,1,1,1,0
+access_seccion_admin,access.seccion.admin,model_supermercado_seccion,base.group_system,1,1,1,1

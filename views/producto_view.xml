@@ -7,6 +7,7 @@
     <field name="arch" type="xml">
       <list string="Productos">
         <field name="nombre"/>
+        <field name="seccion_id"/>
         <field name="precio"/>
         <field name="tipo_iva"/>
         <field name="stock"/>
@@ -30,6 +31,7 @@
           <group>
             <group string="Datos del producto">
               <field name="nombre"/>
+              <field name="seccion_id"/>
               <field name="codigo_barras"/>
               <field name="tipo_conservacion"/>
               <field name="en_oferta"/>
