@@ -1,0 +1,68 @@
+<odoo>
+
+  <!-- Vista LIST de las secciones -->
+  <record id="view_seccion_list" model="ir.ui.view">
+    <field name="name">supermercado.seccion.list</field>
+    <field name="model">supermercado.seccion</field>
+    <field name="arch" type="xml">
+      <list string="Secciones">
+        <field name="nombre"/>
+        <field name="num_pasillo"/>
+        <field name="num_productos"/>
+        <field name="ultima_revision"/>
+        <field name="activa"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Vista FORM de cada sección -->
+  <record id="view_seccion_form" model="ir.ui.view">
+    <field name="name">supermercado.seccion.form</field>
+    <field name="model">supermercado.seccion</field>
+    <field name="arch" type="xml">
+      <form string="Sección">
+        <!-- en la cabecera va el botón que llama al método action_revisar del modelo -->
+        <header>
+          <button name="action_revisar" type="object" string="Revisar sección" class="oe_highlight"/>
+        </header>
+        <sheet>
+          <field name="imagen" widget="image" class="oe_avatar"/>
+          <group>
+            <group string="Datos de la sección">
+              <field name="nombre"/>
+              <field name="num_pasillo"/>
+              <field name="activa"/>
+            </group>
+            <group string="Fechas">
+              <field name="fecha_apertura"/>
+              <field name="ultima_revision"/>
+              <field name="num_productos"/>
+            </group>
+          </group>
+          <group string="Descripción">
+            <field name="descripcion" nolabel="1" colspan="2"/>
+          </group>
+          <!-- lista de los productos de la sección (el One2many), con solo algunas columnas -->
+          <group string="Productos de la sección">
+            <field name="producto_ids" nolabel="1" colspan="2">
+              <list>
+                <field name="nombre"/>
+                <field name="precio"/>
+                <field name="stock"/>
+                <field name="fecha_caducidad"/>
+              </list>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Acción que abre las vistas de sección -->
+  <record id="action_seccion" model="ir.actions.act_window">
+    <field name="name">Secciones</field>
+    <field name="res_model">supermercado.seccion</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

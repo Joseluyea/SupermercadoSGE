@@ -9,4 +9,9 @@
             name="Productos"
             action="action_producto"/>
 
+  <menuitem id="menu_secciones"
+            parent="menu_supermercado_root"
+            name="Secciones"
+            action="action_seccion"/>
+
 </odoo>
