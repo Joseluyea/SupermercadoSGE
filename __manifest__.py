@@ -12,8 +12,12 @@
     # solo necesita el modulo base de Odoo
     'depends': ['base'],
 
-    # aqui iremos poniendo la seguridad, las vistas y los menus cuando los hagamos
+    # archivos que se cargan al instalar, en este orden
+    # los menus van al final porque usan las acciones de las vistas
     'data': [
+        'security/ir.model.access.csv',
+        'views/producto_view.xml',
+        'views/menus.xml',
     ],
 
     'installable': True,

@@ -1,0 +1,12 @@
+<odoo>
+
+  <!-- Menú principal de la app, el que sale en la pantalla de inicio de Odoo -->
+  <menuitem id="menu_supermercado_root" name="Supermercado"/>
+
+  <!-- Submenús, cada uno abre la acción de su modelo -->
+  <menuitem id="menu_productos"
+            parent="menu_supermercado_root"
+            name="Productos"
+            action="action_producto"/>
+
+</odoo>
