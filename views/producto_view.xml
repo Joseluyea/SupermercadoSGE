@@ -35,6 +35,8 @@
               <field name="codigo_barras"/>
               <field name="tipo_conservacion"/>
               <field name="en_oferta"/>
+              <!-- los proveedores salen como etiquetas en vez de como una lista -->
+              <field name="proveedor_ids" widget="many2many_tags"/>
             </group>
             <group string="Precio y stock">
               <field name="precio"/>

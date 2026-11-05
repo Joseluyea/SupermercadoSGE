@@ -43,3 +43,11 @@ class Producto(models.Model):
 
     # Many2one: cada producto esta en una sola seccion (el One2many esta en seccion.py)
     seccion_id = fields.Many2one("supermercado.seccion", string="Sección", help="Sección donde está el producto")
+
+    # Many2many: la relacion se guarda en una tabla intermedia con las dos columnas
+    proveedor_ids = fields.Many2many("supermercado.proveedor",
+                                     relation="supermercado_producto_proveedor_rel",
+                                     column1="producto_id",
+                                     column2="proveedor_id",
+                                     string="Proveedores",
+                                     help="Proveedores que nos traen este producto")

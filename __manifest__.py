@@ -18,6 +18,8 @@
         'security/ir.model.access.csv',
         'views/producto_view.xml',
         'views/seccion_view.xml',
+        'views/empleado_view.xml',
+        'views/proveedor_view.xml',
         'views/menus.xml',
     ],
 

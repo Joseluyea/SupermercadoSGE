@@ -53,6 +53,17 @@
               </list>
             </field>
           </group>
+          <!-- lista de los empleados de la sección (el otro One2many) -->
+          <group string="Empleados de la sección">
+            <field name="empleado_ids" nolabel="1" colspan="2">
+              <list>
+                <field name="nombre"/>
+                <field name="apellidos"/>
+                <field name="puesto"/>
+                <field name="turno"/>
+              </list>
+            </field>
+          </group>
         </sheet>
       </form>
     </field>

@@ -1,0 +1,67 @@
+<odoo>
+
+  <!-- Vista LIST de los proveedores -->
+  <record id="view_proveedor_list" model="ir.ui.view">
+    <field name="name">supermercado.proveedor.list</field>
+    <field name="model">supermercado.proveedor</field>
+    <field name="arch" type="xml">
+      <list string="Proveedores">
+        <field name="nombre"/>
+        <field name="cif"/>
+        <field name="telefono"/>
+        <field name="email"/>
+        <field name="dias_entrega"/>
+        <field name="ultimo_pedido"/>
+        <field name="activo"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- Vista FORM de cada proveedor -->
+  <record id="view_proveedor_form" model="ir.ui.view">
+    <field name="name">supermercado.proveedor.form</field>
+    <field name="model">supermercado.proveedor</field>
+    <field name="arch" type="xml">
+      <form string="Proveedor">
+        <sheet>
+          <field name="logo" widget="image" class="oe_avatar"/>
+          <group>
+            <group string="Datos de la empresa">
+              <field name="nombre"/>
+              <field name="cif"/>
+              <field name="telefono"/>
+              <field name="email"/>
+              <field name="activo"/>
+            </group>
+            <group string="Pedidos">
+              <field name="fecha_alta"/>
+              <field name="ultimo_pedido"/>
+              <field name="dias_entrega"/>
+            </group>
+          </group>
+          <group string="Notas">
+            <field name="notas" nolabel="1" colspan="2"/>
+          </group>
+          <!-- lista de los productos que trae (el Many2many), con solo algunas columnas -->
+          <group string="Productos que nos trae">
+            <field name="producto_ids" nolabel="1" colspan="2">
+              <list>
+                <field name="nombre"/>
+                <field name="precio"/>
+                <field name="stock"/>
+              </list>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Acción que abre las vistas de proveedor -->
+  <record id="action_proveedor" model="ir.actions.act_window">
+    <field name="name">Proveedores</field>
+    <field name="res_model">supermercado.proveedor</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

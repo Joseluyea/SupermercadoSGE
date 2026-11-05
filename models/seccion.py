@@ -26,6 +26,9 @@ class Seccion(models.Model):
     # 'seccion_id' es el Many2one que hay en el modelo producto
     producto_ids = fields.One2many("supermercado.producto", "seccion_id", string="Productos")
 
+    # One2many: una seccion tiene muchos empleados
+    empleado_ids = fields.One2many("supermercado.empleado", "seccion_id", string="Empleados")
+
     # campo calculado, no lo rellena el usuario
     num_productos = fields.Integer(string="Nº de productos", compute="_compute_num_productos")
 
