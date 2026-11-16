@@ -54,6 +54,30 @@
     </field>
   </record>
 
+  <!-- Vista SEARCH de los empleados -->
+  <record id="view_empleado_search" model="ir.ui.view">
+    <field name="name">supermercado.empleado.search</field>
+    <field name="model">supermercado.empleado</field>
+    <field name="arch" type="xml">
+      <search string="Buscar empleados">
+        <field name="nombre"/>
+        <field name="apellidos"/>
+        <field name="dni"/>
+        <field name="seccion_id"/>
+        <filter name="turno_manana" string="Turno de mañana" domain="[('turno', '=', 'manana')]"/>
+        <filter name="turno_tarde" string="Turno de tarde" domain="[('turno', '=', 'tarde')]"/>
+        <separator/>
+        <filter name="jornada_completa" string="Jornada completa" domain="[('jornada_completa', '=', True)]"/>
+        <filter name="media_jornada" string="Media jornada" domain="[('jornada_completa', '=', False)]"/>
+        <group>
+          <filter name="agrupar_seccion" string="Sección" context="{'group_by': 'seccion_id'}"/>
+          <filter name="agrupar_puesto" string="Puesto" context="{'group_by': 'puesto'}"/>
+          <filter name="agrupar_turno" string="Turno" context="{'group_by': 'turno'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <!-- Acción que abre las vistas de empleado -->
   <record id="action_empleado" model="ir.actions.act_window">
     <field name="name">Empleados</field>

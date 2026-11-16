@@ -10,9 +10,11 @@
         <field name="seccion_id"/>
         <field name="precio"/>
         <field name="tipo_iva"/>
+        <field name="precio_final"/>
         <field name="stock"/>
         <field name="tipo_conservacion"/>
         <field name="fecha_caducidad"/>
+        <field name="caducado"/>
         <field name="en_oferta"/>
       </list>
     </field>
@@ -41,8 +43,10 @@
             <group string="Precio y stock">
               <field name="precio"/>
               <field name="tipo_iva"/>
+              <field name="precio_final"/>
               <field name="stock"/>
               <field name="fecha_caducidad"/>
+              <field name="caducado"/>
               <field name="fecha_alta" readonly="1"/>
             </group>
           </group>
@@ -52,6 +56,35 @@
           </group>
         </sheet>
       </form>
+    </field>
+  </record>
+
+  <!-- Vista SEARCH: lo que se puede buscar, los filtros y las agrupaciones del buscador -->
+  <record id="view_producto_search" model="ir.ui.view">
+    <field name="name">supermercado.producto.search</field>
+    <field name="model">supermercado.producto</field>
+    <field name="arch" type="xml">
+      <search string="Buscar productos">
+        <!-- campos por los que se puede buscar escribiendo -->
+        <field name="nombre"/>
+        <field name="codigo_barras"/>
+        <field name="seccion_id"/>
+        <field name="proveedor_ids"/>
+        <!-- filtros: cada uno tiene un domain con la condición que deben cumplir los productos -->
+        <filter name="en_oferta" string="En oferta" domain="[('en_oferta', '=', True)]"/>
+        <filter name="sin_stock" string="Sin stock" domain="[('stock', '&lt;=', 0)]"/>
+        <filter name="caducados" string="Caducados" domain="[('fecha_caducidad', '&lt;', 'today')]"/>
+        <!-- separator separa grupos de filtros; los de un mismo grupo se juntan con "o" -->
+        <separator/>
+        <filter name="refrigerados" string="Refrigerados" domain="[('tipo_conservacion', '=', 'refrigerado')]"/>
+        <filter name="congelados" string="Congelados" domain="[('tipo_conservacion', '=', 'congelado')]"/>
+        <!-- agrupaciones: usan group_by en el context en vez de un domain -->
+        <group>
+          <filter name="agrupar_seccion" string="Sección" context="{'group_by': 'seccion_id'}"/>
+          <filter name="agrupar_conservacion" string="Conservación" context="{'group_by': 'tipo_conservacion'}"/>
+          <filter name="agrupar_iva" string="Tipo de IVA" context="{'group_by': 'tipo_iva'}"/>
+        </group>
+      </search>
     </field>
   </record>
 

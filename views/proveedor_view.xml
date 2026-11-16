@@ -57,6 +57,27 @@
     </field>
   </record>
 
+  <!-- Vista SEARCH de los proveedores -->
+  <record id="view_proveedor_search" model="ir.ui.view">
+    <field name="name">supermercado.proveedor.search</field>
+    <field name="model">supermercado.proveedor</field>
+    <field name="arch" type="xml">
+      <search string="Buscar proveedores">
+        <field name="nombre"/>
+        <field name="cif"/>
+        <field name="producto_ids"/>
+        <filter name="activos" string="Activos" domain="[('activo', '=', True)]"/>
+        <filter name="inactivos" string="Inactivos" domain="[('activo', '=', False)]"/>
+        <separator/>
+        <filter name="entrega_rapida" string="Entrega en 1 o 2 días" domain="[('dias_entrega', '&lt;=', 2)]"/>
+        <group>
+          <filter name="agrupar_dias" string="Días de entrega" context="{'group_by': 'dias_entrega'}"/>
+          <filter name="agrupar_activo" string="Activo" context="{'group_by': 'activo'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <!-- Acción que abre las vistas de proveedor -->
   <record id="action_proveedor" model="ir.actions.act_window">
     <field name="name">Proveedores</field>

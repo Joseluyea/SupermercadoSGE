@@ -69,6 +69,23 @@
     </field>
   </record>
 
+  <!-- Vista SEARCH de las secciones -->
+  <record id="view_seccion_search" model="ir.ui.view">
+    <field name="name">supermercado.seccion.search</field>
+    <field name="model">supermercado.seccion</field>
+    <field name="arch" type="xml">
+      <search string="Buscar secciones">
+        <field name="nombre"/>
+        <field name="num_pasillo"/>
+        <filter name="activas" string="Activas" domain="[('activa', '=', True)]"/>
+        <filter name="inactivas" string="Inactivas" domain="[('activa', '=', False)]"/>
+        <group>
+          <filter name="agrupar_activa" string="Activa" context="{'group_by': 'activa'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <!-- Acción que abre las vistas de sección -->
   <record id="action_seccion" model="ir.actions.act_window">
     <field name="name">Secciones</field>
