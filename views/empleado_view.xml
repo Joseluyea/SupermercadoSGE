@@ -1,6 +1,6 @@
 <odoo>
 
-  <!-- Vista LIST de los empleados -->
+  <!--Vista LIST de empleados-->
   <record id="view_empleado_list" model="ir.ui.view">
     <field name="name">supermercado.empleado.list</field>
     <field name="model">supermercado.empleado</field>
@@ -17,13 +17,13 @@
     </field>
   </record>
 
-  <!-- Vista FORM de cada empleado -->
+  <!-- Vista FORM -->
   <record id="view_empleado_form" model="ir.ui.view">
     <field name="name">supermercado.empleado.form</field>
     <field name="model">supermercado.empleado</field>
     <field name="arch" type="xml">
       <form string="Empleado">
-        <!-- en la cabecera va el botón que llama al método action_fichar del modelo -->
+        <!-- el boton de fichar llama a action_fichar -->
         <header>
           <button name="action_fichar" type="object" string="Fichar" class="oe_highlight"/>
         </header>
@@ -54,7 +54,7 @@
     </field>
   </record>
 
-  <!-- Vista SEARCH de los empleados -->
+  <!-- Vista SEARCH, filtros por turno y jornada -->
   <record id="view_empleado_search" model="ir.ui.view">
     <field name="name">supermercado.empleado.search</field>
     <field name="model">supermercado.empleado</field>
@@ -78,7 +78,7 @@
     </field>
   </record>
 
-  <!-- Acción que abre las vistas de empleado -->
+  <!-- Acción -->
   <record id="action_empleado" model="ir.actions.act_window">
     <field name="name">Empleados</field>
     <field name="res_model">supermercado.empleado</field>

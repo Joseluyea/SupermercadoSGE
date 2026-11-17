@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     'name': "Supermercado El Granero",
     'summary': "Gestión de los productos, secciones, empleados y proveedores del supermercado",
@@ -9,11 +8,11 @@
     'version': '0.1',
     'license': 'LGPL-3',
 
-    # solo necesita el modulo base de Odoo
+    #solo depende de base
     'depends': ['base'],
 
-    # archivos que se cargan al instalar, en este orden
-    # los menus van al final porque usan las acciones de las vistas
+    # archivos que se cargan al instalar, el orden importa
+    # los menus van al final por que usan las acciones de las vistas
     'data': [
         'security/ir.model.access.csv',
         'views/producto_view.xml',
@@ -21,6 +20,11 @@
         'views/empleado_view.xml',
         'views/proveedor_view.xml',
         'views/menus.xml',
+    ],
+
+    #datos de prueba (solo se cargan si la bd tiene puesto lo de datos de demostracion)
+    'demo': [
+        'demo/demo.xml',
     ],
 
     'installable': True,

@@ -1,6 +1,6 @@
 <odoo>
 
-  <!-- Vista LIST: la tabla que sale al entrar en Productos -->
+  <!--Vista LIST de productos -->
   <record id="view_producto_list" model="ir.ui.view">
     <field name="name">supermercado.producto.list</field>
     <field name="model">supermercado.producto</field>
@@ -20,16 +20,16 @@
     </field>
   </record>
 
-  <!-- Vista FORM: la ficha de cada producto para crearlo o editarlo -->
+  <!-- Vista FORM, la ficha de cada producto -->
   <record id="view_producto_form" model="ir.ui.view">
     <field name="name">supermercado.producto.form</field>
     <field name="model">supermercado.producto</field>
     <field name="arch" type="xml">
       <form string="Producto">
         <sheet>
-          <!-- widget image para que el campo Binary se vea como una foto y no como un archivo -->
+          <!-- con el wigdet image el binary se ve como foto y no como un archivo -->
           <field name="imagen" widget="image" class="oe_avatar"/>
-          <!-- dos grupos dentro de otro para que salgan en dos columnas -->
+          <!--dos group dentro de otro para que salga en dos columnas-->
           <group>
             <group string="Datos del producto">
               <field name="nombre"/>
@@ -37,7 +37,7 @@
               <field name="codigo_barras"/>
               <field name="tipo_conservacion"/>
               <field name="en_oferta"/>
-              <!-- los proveedores salen como etiquetas en vez de como una lista -->
+              <!-- many2many_tags para que los proveedores salgan como etiquetas -->
               <field name="proveedor_ids" widget="many2many_tags"/>
             </group>
             <group string="Precio y stock">
@@ -50,7 +50,7 @@
               <field name="fecha_alta" readonly="1"/>
             </group>
           </group>
-          <!-- colspan="2" para que la descripcion ocupe todo el ancho y no solo media columna -->
+          <!-- colspan="2" para que ocupe todo el ancho -->
           <group string="Descripción">
             <field name="descripcion" nolabel="1" colspan="2"/>
           </group>
@@ -59,26 +59,26 @@
     </field>
   </record>
 
-  <!-- Vista SEARCH: lo que se puede buscar, los filtros y las agrupaciones del buscador -->
+  <!--Vista SEARCH, el buscador con los filtros y agrupar por -->
   <record id="view_producto_search" model="ir.ui.view">
     <field name="name">supermercado.producto.search</field>
     <field name="model">supermercado.producto</field>
     <field name="arch" type="xml">
       <search string="Buscar productos">
-        <!-- campos por los que se puede buscar escribiendo -->
+        <!-- campos por los que se puede buscar -->
         <field name="nombre"/>
         <field name="codigo_barras"/>
         <field name="seccion_id"/>
         <field name="proveedor_ids"/>
-        <!-- filtros: cada uno tiene un domain con la condición que deben cumplir los productos -->
+        <!-- filtros, cada uno tiene un domain con la condicion que tienen que cumplir -->
         <filter name="en_oferta" string="En oferta" domain="[('en_oferta', '=', True)]"/>
         <filter name="sin_stock" string="Sin stock" domain="[('stock', '&lt;=', 0)]"/>
         <filter name="caducados" string="Caducados" domain="[('fecha_caducidad', '&lt;', 'today')]"/>
-        <!-- separator separa grupos de filtros; los de un mismo grupo se juntan con "o" -->
+        <!-- el separator separa los filtros en grupos, los del mismo grupo se juntan con "o" y si son de grupos distintos con "y" -->
         <separator/>
         <filter name="refrigerados" string="Refrigerados" domain="[('tipo_conservacion', '=', 'refrigerado')]"/>
         <filter name="congelados" string="Congelados" domain="[('tipo_conservacion', '=', 'congelado')]"/>
-        <!-- agrupaciones: usan group_by en el context en vez de un domain -->
+        <!--para agrupar se usa group_by en el context en vez de domain-->
         <group>
           <filter name="agrupar_seccion" string="Sección" context="{'group_by': 'seccion_id'}"/>
           <filter name="agrupar_conservacion" string="Conservación" context="{'group_by': 'tipo_conservacion'}"/>
@@ -88,11 +88,45 @@
     </field>
   </record>
 
-  <!-- Acción que abre las vistas de producto, la usa el menú -->
+  <!-- Vista KANBAN, cada producto sale en una tarjeta -->
+  <record id="view_producto_kanban" model="ir.ui.view">
+    <field name="name">supermercado.producto.kanban</field>
+    <field name="model">supermercado.producto</field>
+    <field name="arch" type="xml">
+      <kanban>
+        <templates>
+          <!-- card es lo que sale en cada tarjeta, un campo debajo de otro -->
+          <t t-name="card">
+            <field name="nombre"/>
+            <field name="seccion_id"/>
+            <span>Precio: <field name="precio_final"/> €</span>
+            <span>Stock: <field name="stock"/></span>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!--Vista CALENDAR con los productos en el dia que caducan-->
+  <!-- color hace que cada seccion salga de un color -->
+  <!-- quick_create="0" para que al pinchar en un dia se abra el formulario entero -->
+  <record id="view_producto_calendar" model="ir.ui.view">
+    <field name="name">supermercado.producto.calendar</field>
+    <field name="model">supermercado.producto</field>
+    <field name="arch" type="xml">
+      <calendar string="Caducidades" date_start="fecha_caducidad" color="seccion_id" mode="month" quick_create="0">
+        <field name="nombre"/>
+        <field name="stock"/>
+      </calendar>
+    </field>
+  </record>
+
+  <!-- Acción que abre las vistas de producto (la usa el menu) -->
+  <!-- en view_mode van las vistas que se pueden elegir, la primera es la que sale primero -->
   <record id="action_producto" model="ir.actions.act_window">
     <field name="name">Productos</field>
     <field name="res_model">supermercado.producto</field>
-    <field name="view_mode">list,form</field>
+    <field name="view_mode">list,kanban,calendar,form</field>
   </record>
 
 </odoo>

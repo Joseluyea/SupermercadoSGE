@@ -1,0 +1,362 @@
+<odoo>
+  <!--
+    Datos de prueba para ver que funciona todo. Solo se cargan si la base de datos
+    tiene activados los datos de demostracion.
+    Cada record crea un registro, el id sirve para usarlo luego con ref().
+    Las fechas se calculan desde hoy con eval asi siempre hay productos caducados
+    y otros apunto de caducar.
+  -->
+
+  <!-- SECCIONES -->
+  <record id="seccion_fruteria" model="supermercado.seccion">
+    <field name="nombre">Frutería</field>
+    <field name="num_pasillo">1</field>
+    <field name="descripcion">Fruta y verdura fresca de temporada.</field>
+    <field name="fecha_apertura">2018-03-01</field>
+    <field name="ultima_revision" eval="(DateTime.now() - relativedelta(days=1)).strftime('%Y-%m-%d 09:30:00')"/>
+  </record>
+
+  <record id="seccion_carniceria" model="supermercado.seccion">
+    <field name="nombre">Carnicería</field>
+    <field name="num_pasillo">2</field>
+    <field name="descripcion">Carne fresca y embutidos. Mostrador con carnicero por las mañanas.</field>
+    <field name="fecha_apertura">2018-03-01</field>
+    <field name="ultima_revision" eval="(DateTime.now() - relativedelta(days=3)).strftime('%Y-%m-%d 08:15:00')"/>
+  </record>
+
+  <record id="seccion_lacteos" model="supermercado.seccion">
+    <field name="nombre">Lácteos</field>
+    <field name="num_pasillo">3</field>
+    <field name="descripcion">Leche, yogures y quesos. Hay que revisar la temperatura de las neveras cada día.</field>
+    <field name="fecha_apertura">2018-03-01</field>
+  </record>
+
+  <record id="seccion_congelados" model="supermercado.seccion">
+    <field name="nombre">Congelados</field>
+    <field name="num_pasillo">5</field>
+    <field name="descripcion">Arcones de congelados.</field>
+    <field name="fecha_apertura">2020-06-15</field>
+  </record>
+
+  <record id="seccion_drogueria" model="supermercado.seccion">
+    <field name="nombre">Droguería</field>
+    <field name="num_pasillo">7</field>
+    <field name="descripcion">Productos de limpieza e higiene.</field>
+    <field name="fecha_apertura">2019-09-10</field>
+  </record>
+
+  <!-- esta esta cerrada para probar el filtro de inactivas -->
+  <record id="seccion_panaderia" model="supermercado.seccion">
+    <field name="nombre">Panadería</field>
+    <field name="num_pasillo">4</field>
+    <field name="descripcion">Cerrada por obras.</field>
+    <field name="activa" eval="False"/>
+  </record>
+
+  <!-- PROVEEDORES -->
+  <record id="proveedor_huerta" model="supermercado.proveedor">
+    <field name="nombre">Huerta del Valle</field>
+    <field name="cif">B12345678</field>
+    <field name="telefono">961 234 567</field>
+    <field name="email">pedidos@huertadelvalle.example</field>
+    <field name="fecha_alta">2018-02-20</field>
+    <field name="ultimo_pedido" eval="(DateTime.now() - relativedelta(days=1)).strftime('%Y-%m-%d 07:00:00')"/>
+    <field name="dias_entrega">1</field>
+    <field name="notas">Trae la fruta todas las mañanas antes de abrir.</field>
+  </record>
+
+  <record id="proveedor_carnicas" model="supermercado.proveedor">
+    <field name="nombre">Cárnicas Hermanos Gil</field>
+    <field name="cif">B23456789</field>
+    <field name="telefono">962 345 678</field>
+    <field name="fecha_alta">2018-02-25</field>
+    <field name="dias_entrega">2</field>
+  </record>
+
+  <record id="proveedor_lacteos" model="supermercado.proveedor">
+    <field name="nombre">Lácteos del Norte</field>
+    <field name="cif">B34567890</field>
+    <field name="telefono">963 456 789</field>
+    <field name="email">comercial@lacteosdelnorte.example</field>
+    <field name="fecha_alta">2019-01-10</field>
+    <field name="dias_entrega">2</field>
+  </record>
+
+  <record id="proveedor_frio" model="supermercado.proveedor">
+    <field name="nombre">Frío Sur Congelados</field>
+    <field name="cif">B45678901</field>
+    <field name="telefono">964 567 890</field>
+    <field name="fecha_alta">2020-06-01</field>
+    <field name="dias_entrega">4</field>
+  </record>
+
+  <!--este trae cosas de varias secciones-->
+  <record id="proveedor_levante" model="supermercado.proveedor">
+    <field name="nombre">Distribuciones Levante</field>
+    <field name="cif">B56789012</field>
+    <field name="telefono">965 678 901</field>
+    <field name="fecha_alta">2018-03-01</field>
+    <field name="ultimo_pedido" eval="(DateTime.now() - relativedelta(days=6)).strftime('%Y-%m-%d 12:00:00')"/>
+    <field name="dias_entrega">3</field>
+  </record>
+
+  <!-- ya no se trabaja con el, para el filtro de inactivos -->
+  <record id="proveedor_brillo" model="supermercado.proveedor">
+    <field name="nombre">Limpiezas Brillo</field>
+    <field name="cif">B67890123</field>
+    <field name="fecha_alta">2019-09-01</field>
+    <field name="dias_entrega">5</field>
+    <field name="activo" eval="False"/>
+    <field name="notas">Dejamos de trabajar con ellos porque tardaban mucho en servir.</field>
+  </record>
+
+  <!-- PRODUCTOS -->
+  <!-- seccion_id con ref() para el Many2one -->
+  <!-- proveedor_ids con Command.set y una lista de ref() para el Many2many -->
+
+  <!-- Frutería -->
+  <record id="producto_manzanas" model="supermercado.producto">
+    <field name="nombre">Manzanas Golden 1 kg</field>
+    <field name="codigo_barras">8410000000011</field>
+    <field name="precio">1.99</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">40</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_fruteria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_huerta')])]"/>
+  </record>
+
+  <record id="producto_platanos" model="supermercado.producto">
+    <field name="nombre">Plátanos de Canarias 1 kg</field>
+    <field name="codigo_barras">8410000000028</field>
+    <field name="precio">2.49</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">0</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(days=6)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_fruteria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_huerta')])]"/>
+  </record>
+
+  <!-- caduca en 2 dias por eso esta en oferta -->
+  <record id="producto_lechuga" model="supermercado.producto">
+    <field name="nombre">Lechuga iceberg</field>
+    <field name="codigo_barras">8410000000035</field>
+    <field name="precio">0.89</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">25</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+    <field name="en_oferta" eval="True"/>
+    <field name="seccion_id" ref="seccion_fruteria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_huerta')])]"/>
+  </record>
+
+  <!-- Carniceria -->
+  <record id="producto_pollo" model="supermercado.producto">
+    <field name="nombre">Pechuga de pollo 500 g</field>
+    <field name="codigo_barras">8410000000042</field>
+    <field name="precio">4.25</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">15</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+    <field name="en_oferta" eval="True"/>
+    <field name="seccion_id" ref="seccion_carniceria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_carnicas')])]"/>
+  </record>
+
+  <record id="producto_ternera" model="supermercado.producto">
+    <field name="nombre">Filete de ternera 400 g</field>
+    <field name="codigo_barras">8410000000059</field>
+    <field name="precio">7.90</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">8</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_carniceria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_carnicas')])]"/>
+  </record>
+
+  <record id="producto_chorizo" model="supermercado.producto">
+    <field name="nombre">Chorizo ibérico 250 g</field>
+    <field name="codigo_barras">8410000000066</field>
+    <field name="precio">3.50</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">20</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_carniceria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_carnicas'), ref('proveedor_levante')])]"/>
+  </record>
+
+  <!-- Lácteos -->
+  <!-- la leche la traen 2 proveedores -->
+  <record id="producto_leche" model="supermercado.producto">
+    <field name="nombre">Leche entera 1 L</field>
+    <field name="codigo_barras">8410000000073</field>
+    <field name="precio">0.85</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">60</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+    <field name="descripcion">Brik de leche entera UHT.</field>
+    <field name="seccion_id" ref="seccion_lacteos"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_lacteos'), ref('proveedor_levante')])]"/>
+  </record>
+
+  <!-- este ya esta caducado -->
+  <record id="producto_yogur" model="supermercado.producto">
+    <field name="nombre">Yogur natural pack 4</field>
+    <field name="codigo_barras">8410000000080</field>
+    <field name="precio">1.20</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">30</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_lacteos"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_lacteos')])]"/>
+  </record>
+
+  <record id="producto_queso" model="supermercado.producto">
+    <field name="nombre">Queso curado 250 g</field>
+    <field name="codigo_barras">8410000000097</field>
+    <field name="precio">4.60</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">12</field>
+    <field name="tipo_conservacion">refrigerado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=1)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_lacteos"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_lacteos')])]"/>
+  </record>
+
+  <!-- Congelados -->
+  <record id="producto_pizza" model="supermercado.producto">
+    <field name="nombre">Pizza cuatro quesos</field>
+    <field name="codigo_barras">8410000000103</field>
+    <field name="precio">3.10</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">18</field>
+    <field name="tipo_conservacion">congelado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_congelados"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_frio'), ref('proveedor_levante')])]"/>
+  </record>
+
+  <!-- sin stock -->
+  <record id="producto_helado" model="supermercado.producto">
+    <field name="nombre">Helado de vainilla 1 L</field>
+    <field name="codigo_barras">8410000000110</field>
+    <field name="precio">2.95</field>
+    <field name="tipo_iva">10</field>
+    <field name="stock">0</field>
+    <field name="tipo_conservacion">congelado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_congelados"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_frio')])]"/>
+  </record>
+
+  <record id="producto_guisantes" model="supermercado.producto">
+    <field name="nombre">Guisantes congelados 1 kg</field>
+    <field name="codigo_barras">8410000000127</field>
+    <field name="precio">1.75</field>
+    <field name="tipo_iva">4</field>
+    <field name="stock">22</field>
+    <field name="tipo_conservacion">congelado</field>
+    <field name="fecha_caducidad" eval="(DateTime.today() + relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+    <field name="seccion_id" ref="seccion_congelados"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_frio')])]"/>
+  </record>
+
+  <!-- Drogueria, sin caducidad y con iva del 21 -->
+  <record id="producto_detergente" model="supermercado.producto">
+    <field name="nombre">Detergente líquido 3 L</field>
+    <field name="codigo_barras">8410000000134</field>
+    <field name="precio">6.50</field>
+    <field name="tipo_iva">21</field>
+    <field name="stock">10</field>
+    <field name="seccion_id" ref="seccion_drogueria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_levante')])]"/>
+  </record>
+
+  <record id="producto_papel" model="supermercado.producto">
+    <field name="nombre">Papel higiénico 12 rollos</field>
+    <field name="codigo_barras">8410000000141</field>
+    <field name="precio">4.99</field>
+    <field name="tipo_iva">21</field>
+    <field name="stock">35</field>
+    <field name="seccion_id" ref="seccion_drogueria"/>
+    <field name="proveedor_ids" eval="[Command.set([ref('proveedor_levante')])]"/>
+  </record>
+
+  <!-- EMPLEADOS -->
+  <record id="empleado_carmen" model="supermercado.empleado">
+    <field name="nombre">Carmen</field>
+    <field name="apellidos">López Díaz</field>
+    <field name="dni">11111111H</field>
+    <field name="fecha_nacimiento">1978-04-12</field>
+    <field name="puesto">encargado</field>
+    <field name="turno">manana</field>
+    <field name="salario">1650</field>
+    <field name="seccion_id" ref="seccion_lacteos"/>
+    <field name="ultimo_fichaje" eval="DateTime.now().strftime('%Y-%m-%d 07:55:00')"/>
+    <field name="observaciones">Encargada de la tienda. También se ocupa de los pedidos a proveedores.</field>
+  </record>
+
+  <record id="empleado_javier" model="supermercado.empleado">
+    <field name="nombre">Javier</field>
+    <field name="apellidos">Martín Ruiz</field>
+    <field name="dni">22222222J</field>
+    <field name="fecha_nacimiento">1985-11-03</field>
+    <field name="puesto">carnicero</field>
+    <field name="turno">manana</field>
+    <field name="salario">1400</field>
+    <field name="seccion_id" ref="seccion_carniceria"/>
+    <field name="ultimo_fichaje" eval="DateTime.now().strftime('%Y-%m-%d 08:02:00')"/>
+  </record>
+
+  <record id="empleado_marta" model="supermercado.empleado">
+    <field name="nombre">Marta</field>
+    <field name="apellidos">Romero Gil</field>
+    <field name="dni">33333333P</field>
+    <field name="fecha_nacimiento">1992-07-21</field>
+    <field name="puesto">frutero</field>
+    <field name="turno">manana</field>
+    <field name="salario">1300</field>
+    <field name="seccion_id" ref="seccion_fruteria"/>
+  </record>
+
+  <!-- la cajera no tiene seccion -->
+  <record id="empleado_lucia" model="supermercado.empleado">
+    <field name="nombre">Lucía</field>
+    <field name="apellidos">Fernández Gómez</field>
+    <field name="dni">44444444A</field>
+    <field name="fecha_nacimiento">2001-02-14</field>
+    <field name="puesto">cajero</field>
+    <field name="turno">tarde</field>
+    <field name="salario">750</field>
+    <field name="jornada_completa" eval="False"/>
+  </record>
+
+  <record id="empleado_pablo" model="supermercado.empleado">
+    <field name="nombre">Pablo</field>
+    <field name="apellidos">Sánchez Torres</field>
+    <field name="dni">55555555K</field>
+    <field name="fecha_nacimiento">1998-09-30</field>
+    <field name="puesto">reponedor</field>
+    <field name="turno">tarde</field>
+    <field name="salario">1200</field>
+    <field name="seccion_id" ref="seccion_congelados"/>
+  </record>
+
+  <record id="empleado_david" model="supermercado.empleado">
+    <field name="nombre">David</field>
+    <field name="apellidos">Navarro Ortiz</field>
+    <field name="dni">66666666Q</field>
+    <field name="fecha_nacimiento">2007-05-18</field>
+    <field name="puesto">reponedor</field>
+    <field name="turno">tarde</field>
+    <field name="salario">650</field>
+    <field name="jornada_completa" eval="False"/>
+    <field name="seccion_id" ref="seccion_drogueria"/>
+  </record>
+
+</odoo>

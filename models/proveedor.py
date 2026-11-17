@@ -27,15 +27,15 @@ class Proveedor(models.Model):
 
     notas = fields.Text(string="Notas", help="Observaciones sobre el proveedor")
 
-    # Many2many: un proveedor nos trae muchos productos y un producto lo pueden traer varios proveedores
-    # es la misma tabla que en producto.py pero con las columnas al reves
+    #Many2many con producto, un proveedor trae muchos productos y un producto lo pueden traer varios proveedores
+    #usa la misma tabal que en producto.py pero con las columnas al reves
     producto_ids = fields.Many2many("supermercado.producto",
                                     relation="supermercado_producto_proveedor_rel",
                                     column1="proveedor_id",
                                     column2="producto_id",
                                     string="Productos")
 
-    # no deja guardar el proveedor si los dias de entrega son 0 o negativos
+    #los dias de entrega tienen que ser mas de 0
     @api.constrains("dias_entrega")
     def _check_dias_entrega(self):
         for proveedor in self:

@@ -1,6 +1,6 @@
 <odoo>
 
-  <!-- Vista LIST de los proveedores -->
+  <!-- Vista LIST -->
   <record id="view_proveedor_list" model="ir.ui.view">
     <field name="name">supermercado.proveedor.list</field>
     <field name="model">supermercado.proveedor</field>
@@ -17,7 +17,7 @@
     </field>
   </record>
 
-  <!-- Vista FORM de cada proveedor -->
+  <!--Vista FORM-->
   <record id="view_proveedor_form" model="ir.ui.view">
     <field name="name">supermercado.proveedor.form</field>
     <field name="model">supermercado.proveedor</field>
@@ -42,7 +42,7 @@
           <group string="Notas">
             <field name="notas" nolabel="1" colspan="2"/>
           </group>
-          <!-- lista de los productos que trae (el Many2many), con solo algunas columnas -->
+          <!-- productos que trae el proveedor (Many2many) -->
           <group string="Productos que nos trae">
             <field name="producto_ids" nolabel="1" colspan="2">
               <list>
@@ -57,7 +57,7 @@
     </field>
   </record>
 
-  <!-- Vista SEARCH de los proveedores -->
+  <!-- Vista SEARCH -->
   <record id="view_proveedor_search" model="ir.ui.view">
     <field name="name">supermercado.proveedor.search</field>
     <field name="model">supermercado.proveedor</field>
@@ -78,7 +78,7 @@
     </field>
   </record>
 
-  <!-- Acción que abre las vistas de proveedor -->
+  <!-- Acción que abre las vistas de proveedores -->
   <record id="action_proveedor" model="ir.actions.act_window">
     <field name="name">Proveedores</field>
     <field name="res_model">supermercado.proveedor</field>

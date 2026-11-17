@@ -1,6 +1,6 @@
 <odoo>
 
-  <!-- Vista LIST de las secciones -->
+  <!--Vista LIST -->
   <record id="view_seccion_list" model="ir.ui.view">
     <field name="name">supermercado.seccion.list</field>
     <field name="model">supermercado.seccion</field>
@@ -15,13 +15,13 @@
     </field>
   </record>
 
-  <!-- Vista FORM de cada sección -->
+  <!-- Vista FORM -->
   <record id="view_seccion_form" model="ir.ui.view">
     <field name="name">supermercado.seccion.form</field>
     <field name="model">supermercado.seccion</field>
     <field name="arch" type="xml">
       <form string="Sección">
-        <!-- en la cabecera va el botón que llama al método action_revisar del modelo -->
+        <!-- boton que llama al metodo action_revisar de seccion.py -->
         <header>
           <button name="action_revisar" type="object" string="Revisar sección" class="oe_highlight"/>
         </header>
@@ -42,7 +42,7 @@
           <group string="Descripción">
             <field name="descripcion" nolabel="1" colspan="2"/>
           </group>
-          <!-- lista de los productos de la sección (el One2many), con solo algunas columnas -->
+          <!-- los productos de la seccion (One2many), solo con algunas columnas -->
           <group string="Productos de la sección">
             <field name="producto_ids" nolabel="1" colspan="2">
               <list>
@@ -53,7 +53,7 @@
               </list>
             </field>
           </group>
-          <!-- lista de los empleados de la sección (el otro One2many) -->
+          <!-- y los empleados -->
           <group string="Empleados de la sección">
             <field name="empleado_ids" nolabel="1" colspan="2">
               <list>
@@ -69,7 +69,7 @@
     </field>
   </record>
 
-  <!-- Vista SEARCH de las secciones -->
+  <!-- Vista SEARCH -->
   <record id="view_seccion_search" model="ir.ui.view">
     <field name="name">supermercado.seccion.search</field>
     <field name="model">supermercado.seccion</field>
@@ -86,7 +86,7 @@
     </field>
   </record>
 
-  <!-- Acción que abre las vistas de sección -->
+  <!-- Acción que enlaza las vistas -->
   <record id="action_seccion" model="ir.actions.act_window">
     <field name="name">Secciones</field>
     <field name="res_model">supermercado.seccion</field>
